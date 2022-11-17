@@ -17,8 +17,8 @@
       <van-tab title="待付款" name="0"></van-tab>
       <!-- <van-tab title="待确认" name="1"></van-tab>
       <van-tab title="待发货" name="2"></van-tab>
-      <van-tab title="已发货" name="3"></van-tab> -->
-      <van-tab title="交易完成" name="4"></van-tab>
+      <van-tab title="已发货" name="3"></van-tab>
+      <van-tab title="交易完成" name="4"></van-tab> -->
     </van-tabs>
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="order-list-refresh">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" @offset="300">
@@ -66,6 +66,7 @@ export default {
       if (this.page >= data.totalPage) this.finished = true
     },
     onChangeTab(name, title) {
+      console.log(name, "===>", title)
       this.status = name   //查询数据的type
       this.onRefresh()
     },

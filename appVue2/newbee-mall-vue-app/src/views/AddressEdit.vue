@@ -10,19 +10,10 @@
 
 <template>
   <div class="address-edit-box">
-    <s-header :name="`${type == 'add' ? '新增地址' : '编辑地址'}`"></s-header>
-    <van-address-edit
-      class="edit"
-      :area-list="areaList"
-      :address-info="addressInfo"
-      :show-delete="type == 'edit'"
-      show-set-default
-      show-search-result
-      :search-result="searchResult"
-      :area-columns-placeholder="['请选择', '请选择', '请选择']"
-      @save="onSave"
-      @delete="onDelete"
-    />
+    <s-header :name="`${type == 'add' ? '新增·地址' : '编辑地址'}`"></s-header>
+    <van-address-edit class="edit" :area-list="areaList" :address-info="addressInfo" :show-delete="type == 'edit'"
+      show-set-default show-search-result :search-result="searchResult"
+      :area-columns-placeholder="['请选择', '请选择', '请选择']" @save="onSave" @delete="onDelete" />
   </div>
 </template>
 
@@ -39,8 +30,8 @@ export default {
     return {
       areaList: {
         province_list: {},
-        city_list: {},
-        county_list: {}
+        // city_list: {},
+        // county_list: {}
       },
       searchResult: [],
       type: 'add',
@@ -52,23 +43,26 @@ export default {
   async mounted() {
     // 省市区列表构造
     let _province_list = {}
-    let _city_list = {}
-    let _county_list = {}
+    // let _city_list = {}
+    // let _county_list = {}
     tdist.getLev1().forEach(p => {
       _province_list[p.id] = p.text
-      tdist.getLev2(p.id).forEach(c => {
-        _city_list[c.id] = c.text
-        tdist.getLev3(c.id).forEach(q => _county_list[q.id] = q.text)
-      })
+      // tdist.getLev2(p.id).forEach(c => {
+      //   _city_list[c.id] = c.text
+      //   tdist.getLev3(c.id).forEach(q => _county_list[q.id] = q.text)
+      // })
     })
     this.areaList.province_list = _province_list
-    this.areaList.city_list = _city_list
-    this.areaList.county_list = _county_list
+    // this.areaList.city_list = _city_list
+    // this.areaList.county_list = _county_list
 
-    const { addressId, type, from } = this.$route.query
+    //http://localhost:8080/#/address-edit?type=edit&addressId=5&from=mine 
+    const { addressId, type, from } = this.$route.query   //获取地址后面的参数
     this.addressId = addressId
     this.type = type
     this.from = from || ''
+
+    //编辑地址
     if (type == 'edit') {
       const { data: addressDetail } = await getAddressDetail(addressId)
       let _areaCode = ''
@@ -91,8 +85,8 @@ export default {
         name: addressDetail.userName,
         tel: addressDetail.userPhone,
         province: addressDetail.provinceName,
-        city: addressDetail.cityName,
-        county: addressDetail.regionName,
+        // city: addressDetail.cityName,
+        // county: addressDetail.regionName,
         addressDetail: addressDetail.detailAddress,
         areaCode: _areaCode,
         isDefault: !!addressDetail.defaultFlag
@@ -132,17 +126,20 @@ export default {
 </script>
 
 <style lang="less">
-  @import '../common/style/mixin';
-  .address-edit-box {
-    margin-top: 44px;
-    .van-address-edit {
-      .van-button--danger {
-        background: @primary;
-        border-color: @primary;
-      }
-      .van-switch--on {
-        background: @primary;
-      }
+@import '../common/style/mixin';
+
+.address-edit-box {
+  margin-top: 44px;
+
+  .van-address-edit {
+    .van-button--danger {
+      background: @primary;
+      border-color: @primary;
+    }
+
+    .van-switch--on {
+      background: @primary;
     }
   }
+}
 </style>

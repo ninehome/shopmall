@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 	"main.go/global"
 	"main.go/model/common/response"
+	"main.go/model/mall"
 	mallReq "main.go/model/mall/request"
 	"main.go/utils"
 	"strconv"
@@ -18,6 +19,7 @@ func (m *MallOrderApi) SaveOrder(c *gin.Context) {
 	_ = c.ShouldBindJSON(&saveOrderParam)
 	if err := utils.Verify(saveOrderParam, utils.SaveOrderParamVerify); err != nil {
 		response.FailWithMessage(err.Error(), c)
+		return
 	}
 	token := c.GetHeader("token")
 
@@ -32,10 +34,18 @@ func (m *MallOrderApi) SaveOrder(c *gin.Context) {
 		}
 		if priceTotal < 1 {
 			response.FailWithMessage("价格异常", c)
+			return
 		}
-		_, userAddress := mallUserAddressService.GetMallUserDefaultAddress(token)
+		errAddress, userAddress := mallUserAddressService.GetMallUserDefaultAddress(token) //查询用户收货地址是否存在，不存在的不能支付
+
+		if userAddress == (mall.MallUserAddress{}) {
+			response.FailWithMessage("未填写收货地址:"+errAddress.Error(), c)
+			return
+
+		}
+
 		if err, saveOrderResult := mallOrderService.SaveOrder(token, userAddress, itemsForSave); err != nil {
-			global.GVA_LOG.Error("生成订单失败", zap.Error(err))
+			global.GVA_LOG.Error("生成订单失败", zap.Error(err)) //写入日志
 			response.FailWithMessage("生成订单失败:"+err.Error(), c)
 		} else {
 			response.OkWithData(saveOrderResult, c)
@@ -103,14 +113,14 @@ func (m *MallOrderApi) OrderList(c *gin.Context) {
 			List:       make([]interface{}, 0),
 			TotalCount: total,
 			CurrPage:   pageNumber,
-			PageSize:   5,
+			PageSize:   80,
 		}, "SUCCESS", c)
 	} else {
 		response.OkWithDetailed(response.PageResult{
 			List:       list,
 			TotalCount: total,
 			CurrPage:   pageNumber,
-			PageSize:   5,
+			PageSize:   80,
 		}, "SUCCESS", c)
 	}
 

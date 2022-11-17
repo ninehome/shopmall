@@ -113,16 +113,26 @@ export default {
       });
     },
     async showPayFn(id) {
+      console.log(id)
       Toast.loading
-      await payOrder({ orderNo: id, payType: 2 })
-      this.showPay = false
-      this.init()
+      const { data, resultCode } = await payOrder({ orderNo: id, payType: 2 })
+
+      if (resultCode == 200) {
+        console.log('++++++++++++++++++++++')
+        this.showPay = false
+        // this.init()
+        Toast('SUCCESS')
+        this.$router.push({ path: 'order' })
+      }
+
+
+
     },
     async payOrder(id, type) {
       Toast.loading
       await payOrder({ orderNo: id, payType: type })
       this.showPay = false
-      this.init()
+      // this.init()
     },
     close() {
       Dialog.close()

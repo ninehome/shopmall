@@ -18,17 +18,17 @@ func (m *MallIndexApi) MallIndexInfo(c *gin.Context) {
 		global.GVA_LOG.Error("轮播图获取失败"+err.Error(), zap.Error(err))
 		response.FailWithMessage("轮播图获取失败", c)
 	}
-	err, hotGoodses := mallIndexConfigService.GetConfigGoodsForIndex(enum.IndexGoodsHot.Code(), 4)
+	err, hotGoodses := mallIndexConfigService.GetConfigGoodsForIndex(enum.IndexGoodsHot.Code(), 8)
 	if err != nil {
 		global.GVA_LOG.Error("热销商品获取失败"+err.Error(), zap.Error(err))
 		response.FailWithMessage("热销商品获取失败", c)
 	}
-	err, newGoodses := mallIndexConfigService.GetConfigGoodsForIndex(enum.IndexGoodsNew.Code(), 5)
+	err, newGoodses := mallIndexConfigService.GetConfigGoodsForIndex(enum.IndexGoodsNew.Code(), 8)
 	if err != nil {
 		global.GVA_LOG.Error("新品获取失败"+err.Error(), zap.Error(err))
 		response.FailWithMessage("新品获取失败", c)
 	}
-	err, recommendGoodses := mallIndexConfigService.GetConfigGoodsForIndex(enum.IndexGoodsRecommond.Code(), 10)
+	err, recommendGoodses := mallIndexConfigService.GetConfigGoodsForIndex(enum.IndexGoodsRecommond.Code(), 16)
 	if err != nil {
 		global.GVA_LOG.Error("推荐商品获取失败"+err.Error(), zap.Error(err))
 		response.FailWithMessage("推荐商品获取失败", c)

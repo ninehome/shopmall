@@ -20,9 +20,9 @@ axios.defaults.headers["token"] = localStorage.getItem("token") || "";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 
 axios.interceptors.response.use((res) => {
-  // console.log("-----------start---------");
-  // console.log(res.data);
-  // console.log("----------end----------");
+  console.log("-----------start---------");
+  console.log(res.data);
+  console.log("----------end----------");
   if (typeof res.data !== "object") {
     Toast.fail("服务端异常！");
     return Promise.reject(res);
@@ -33,7 +33,7 @@ axios.interceptors.response.use((res) => {
       router.push({ path: "/login" });
     }
     // console.log(res.data);
-    // return Promise.reject(res.data);
+    // Promise.reject(res.data);
     return res.data;
   }
 

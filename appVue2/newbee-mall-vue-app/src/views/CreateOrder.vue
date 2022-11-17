@@ -77,11 +77,17 @@ export default {
       const _cartItemIds = cartItemIds ? JSON.parse(cartItemIds) : JSON.parse(getLocal('cartItemIds'))
       setLocal('cartItemIds', JSON.stringify(_cartItemIds))
       const { data: list } = await getByCartItemIds({ cartItemIds: _cartItemIds.join(',') })
-      const { data: address } = addressId ? await getAddressDetail(addressId) : await getDefaultAddress()
-      if (!address) {
-        this.$router.push({ path: 'address' })
+      const { data: address, resultCode } = addressId ? await getAddressDetail(addressId) : await getDefaultAddress()
+
+      console.log(resultCode)
+      if (resultCode != 200) {
+        setTimeout(() => {
+          this.$router.push({ path: '/address' })
+        }, 1200);
+
         return
       }
+
       this.cartList = list
       this.address = address
       Toast.clear()
@@ -92,12 +98,13 @@ export default {
     deleteLocal() {
       setLocal('cartItemIds', '')
     },
+
     async createOrder() {
       const params = {
         addressId: this.address.addressId,
         cartItemIds: this.cartList.map(item => item.cartItemId)
       }
-      const { data, resultCode } = await createOrder(params)  //创建订单
+      const { data, resultCode, message } = await createOrder(params)  //创建订单
 
       if (resultCode == 200) {
         // console.log(data)
@@ -116,7 +123,7 @@ export default {
 
         console.log('------>>>')
         console.log(paydata)
-        this.$router.push({ path: 'order' })
+        this.$router.push({ path: '/order' })
 
 
 
@@ -124,7 +131,21 @@ export default {
         // this.$store.dispatch('updateCart')
         // this.$router.go(0)
 
+      } else {
+        //支付失败返回购物车
+
+        if (message != null) {
+          Toast.fail(message)
+
+        }
+
+
+        setTimeout(() => {
+          this.$router.push({ path: '/cart' })
+        }, 2000);
+
       }
+
 
 
     },
