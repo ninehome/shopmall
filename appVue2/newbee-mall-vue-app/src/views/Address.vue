@@ -48,14 +48,27 @@ export default {
   },
   methods: {
     onAdd() {
-      this.$router.push({ path: `address-edit?type=add&from=${this.from}` })
+      this.$router.push({ path: `address-edit-v2?type=add&from=${this.from}` })
     },
     onEdit(item, index) {
-      this.$router.push({ path: `address-edit?type=edit&addressId=${item.id}&from=${this.from}` })
+      this.$router.push({ path: `address-edit-v2?type=edit&addressId=${item.id}&from=${this.from}` })
     },
     select(item, index) {
       this.$router.push({ path: `create-order?addressId=${item.id}&from=${this.from}` })
     }
+
+
+
+
+    // onAdd() {
+    //   this.$router.push({ path: `address-edit?type=add&from=${this.from}` })
+    // },
+    // onEdit(item, index) {
+    //   this.$router.push({ path: `address-edit?type=edit&addressId=${item.id}&from=${this.from}` })
+    // },
+    // select(item, index) {
+    //   this.$router.push({ path: `create-order?addressId=${item.id}&from=${this.from}` })
+    // }
   }
 }
 </script>

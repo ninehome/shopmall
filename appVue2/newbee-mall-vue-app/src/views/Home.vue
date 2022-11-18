@@ -143,7 +143,7 @@ export default {
     this.newGoodses = data.newGoodses
     this.hots = data.hotGoodses
     this.recommends = data.recommendGoodses
-    console.log(newGoodses)
+    // console.log(this.newGoodses)
 
     Toast.clear()
   },

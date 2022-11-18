@@ -21,7 +21,7 @@
       <van-tab title="交易完成" name="4"></van-tab> -->
     </van-tabs>
     <van-pull-refresh v-model="refreshing" @refresh="onRefresh" class="order-list-refresh">
-      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="onLoad" @offset="300">
+      <van-list v-model="loading" :finished="finished" finished-text="no more data..." @load="onLoad" @offset="300">
         <div v-for="(item, index) in list" :key="index" class="order-item-box" @click="goTo(item.orderNo)">
           <div class="order-item-header">
             <span>订单时间：{{ item.createTime }}</span>

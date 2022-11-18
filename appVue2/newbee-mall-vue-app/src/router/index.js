@@ -138,6 +138,17 @@ const routes = [
       import(/* webpackChunkName: "address-edit" */ "../views/AddressEdit.vue"),
   },
   {
+    path: "/address-edit-v2",
+    name: "address-edit-v2",
+    meta: {
+      index: 3,
+    },
+    component: () =>
+      import(
+        /* webpackChunkName: "address-edit" */ "../views/AddressEditV2.vue"
+      ),
+  },
+  {
     path: "/about",
     name: "about",
     meta: {
